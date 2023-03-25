@@ -1,0 +1,4 @@
+TinyDB
+python-telegram-bot==13.15
+flask
+requests
