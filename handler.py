@@ -3,8 +3,8 @@ from telegram.ext import Updater,Dispatcher, CommandHandler, MessageHandler, Fil
 from db import DB
 from card import Cart
 
-db = DB('phoneBot/db.json')
-cr = Cart('phoneBot/data.json')
+db = DB('db.json')
+cr = Cart('data.json')
 
 def start(update:Update,context:CallbackContext):
     bot = context.bot
@@ -173,12 +173,68 @@ def get_phone(update:Update, context):
     text = f"📲{name}\n\n🎨{color}\n💾{ram}/{memory}\n💰{price}\n\n@telefonBozor"
     btn1 = InlineKeyboardButton(text="🛒 Saqlash", callback_data=f'addcard_{brend}_{doc_id}')
     btn2 = InlineKeyboardButton(text="❌", callback_data='delete')
+    btn3 = InlineKeyboardButton(text="⬅️", callback_data=f'left_{brend}_{doc_id}')
+    btn4 = InlineKeyboardButton(text="➡️", callback_data=f'right_{brend}_{doc_id}')
     keyboard = InlineKeyboardMarkup([
-        [btn2,btn1]
+        [btn3,btn2,btn4],
+        [btn1]
     ])
 
     bot.send_photo(chat_id=query.message.chat.id, photo=img, caption=text, reply_markup=keyboard)
 
+def right(update:Update,context:CallbackContext):
+    bot = context.bot
+    query = update.callback_query
+
+    chat_id = query.message.chat.id
+    data,brend,doc_id = query.data.split('_')
+    doc_id = int(doc_id) + 1
+    phone = db.getPhone(brend, doc_id)
+    price = phone['price']
+    ram = phone['RAM']
+    memory = phone['memory']
+    name = phone['name']
+    color = phone['color']
+    img = phone['img_url']
+    text = f"📲{name}\n\n🎨{color}\n💾{ram}/{memory}\n💰{price}\n\n@telefonBozor"
+    btn1 = InlineKeyboardButton(text="🛒 Saqlash", callback_data=f'addcard_{brend}_{doc_id}')
+    btn2 = InlineKeyboardButton(text="❌", callback_data='delete')
+    btn3 = InlineKeyboardButton(text="⬅️", callback_data=f'left_{brend}_{doc_id}')
+    btn4 = InlineKeyboardButton(text="➡️", callback_data=f'right_{brend}_{doc_id}')
+    keyboard = InlineKeyboardMarkup([
+        [btn3,btn2,btn4],
+        [btn1]
+    ])
+    
+    bot.delete_message(chat_id = query.from_user.id,message_id = query.message.message_id,)
+    bot.send_photo(chat_id=query.message.chat.id, photo=img, caption=text, reply_markup=keyboard)
+
+def left(update:Update,context:CallbackContext):
+    bot = context.bot
+    query = update.callback_query
+
+    chat_id = query.message.chat.id
+    data,brend,doc_id = query.data.split('_')
+    doc_id = int(doc_id) - 1
+    phone = db.getPhone(brend, doc_id)
+    price = phone['price']
+    ram = phone['RAM']
+    memory = phone['memory']
+    name = phone['name']
+    color = phone['color']
+    img = phone['img_url']
+    text = f"📲{name}\n\n🎨{color}\n💾{ram}/{memory}\n💰{price}\n\n@telefonBozor"
+    btn1 = InlineKeyboardButton(text="🛒 Saqlash", callback_data=f'addcard_{brend}_{doc_id}')
+    btn2 = InlineKeyboardButton(text="❌", callback_data='delete')
+    btn3 = InlineKeyboardButton(text="⬅️", callback_data=f'left_{brend}_{doc_id}')
+    btn4 = InlineKeyboardButton(text="➡️", callback_data=f'right_{brend}_{doc_id}')
+    keyboard = InlineKeyboardMarkup([
+        [btn3,btn2,btn4],
+        [btn1]
+    ])
+    
+    bot.delete_message(chat_id = query.from_user.id,message_id = query.message.message_id,)
+    bot.send_photo(chat_id=query.message.chat.id, photo=img, caption=text, reply_markup=keyboard)
 
 def addCard(update:Update,context:CallbackContext):
     bot = context.bot
@@ -188,8 +244,6 @@ def addCard(update:Update,context:CallbackContext):
     data,brend,doc_id = query.data.split('_')
     
     cart = cr.add(brend,doc_id,chat_id)
-    
-    bot.delete_message(chat_id = query.from_user.id,message_id = query.message.message_id,)
 
 
     query.answer("Saqlandi")
