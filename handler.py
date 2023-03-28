@@ -3,8 +3,8 @@ from telegram.ext import Updater,Dispatcher, CommandHandler, MessageHandler, Fil
 from db import DB
 from card import Cart
 
-db = DB('PhoneBot/db.json')
-cr = Cart('PhoneBot/data.json')
+db = DB('phoneBot/db.json')
+cr = Cart('phoneBot/data.json')
 
 def start(update:Update,context:CallbackContext):
     bot = context.bot
