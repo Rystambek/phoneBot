@@ -14,7 +14,9 @@ from handler import (start,
                      about,
                      contact,
                      query,
-                     delete
+                     delete,
+                     left,
+                     right
                      )
 from flask import Flask, request
 import os
@@ -50,6 +52,8 @@ def hello():
         dp.add_handler(CallbackQueryHandler(get_product,pattern='brend'))
         dp.add_handler(CallbackQueryHandler(next_product, pattern="next"))
         dp.add_handler(CallbackQueryHandler(get_phone, pattern="product"))
+        dp.add_handler(CallbackQueryHandler(right, pattern="right"))
+        dp.add_handler(CallbackQueryHandler(left, pattern="left"))
         dp.add_handler(CallbackQueryHandler(menu, pattern="bosh_menu"))
         dp.add_handler(CallbackQueryHandler(addCard, pattern="addcard"))
         dp.add_handler(CallbackQueryHandler(add_card, pattern="viec_cart_data"))
