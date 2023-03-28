@@ -14,11 +14,13 @@ from handler import (start,
                      about,
                      contact,
                      query,
-                     delete
+                     delete,
+                     right,
+                     left
                      )
 
 TOKEN = '5766174948:AAERI4lwWYzIfSPaLDBE9gWugxMpNAMgmVE'
-
+# TOKEN = '6039416846:AAFcl3LxsN9Kv5XgF8eE0u6JXyGNSN_RnrU'
 updater = Updater(token=TOKEN)
 dp = updater.dispatcher
 
@@ -27,6 +29,8 @@ dp.add_handler(CallbackQueryHandler(magazin,pattern='view_product_data'))
 dp.add_handler(CallbackQueryHandler(get_product,pattern='brend'))
 dp.add_handler(CallbackQueryHandler(next_product, pattern="next"))
 dp.add_handler(CallbackQueryHandler(get_phone, pattern="product"))
+dp.add_handler(CallbackQueryHandler(right, pattern="right"))
+dp.add_handler(CallbackQueryHandler(left, pattern="left"))
 dp.add_handler(CallbackQueryHandler(menu, pattern="bosh_menu"))
 dp.add_handler(CallbackQueryHandler(addCard, pattern="addcard"))
 dp.add_handler(CallbackQueryHandler(add_card, pattern="viec_cart_data"))
